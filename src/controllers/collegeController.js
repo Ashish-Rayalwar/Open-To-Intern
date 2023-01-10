@@ -30,7 +30,7 @@ const createCollege = async (req, res) => {
       
     let createData = await collegeModel.create(data);
 
-    return res.status(400).send({ status: true, data: createData });
+    return res.status(201).send({ status: true, data: createData });
 
   } catch (err) {
 
@@ -48,8 +48,10 @@ const getCollege = async (req, res) => {
     let collegeName = req.query.collegeName;
 
     if (Object.keys(req.query).length === 0) return res.status(400).send({ status: false, msg: "Please send valid filter" });
+
+    if(!(Object.keys(req.query).includes("collegeName"))) return res.status(400).send({msg:"Invalid key Name"})
       
-    if (!collegeName) return res.status(400).send({ msg: "plz enter valid filter" });
+    if (!collegeName) return res.status(400).send({ msg: "plz send college name" });
      
     let findCollege = await collegeModel.findOne({name:collegeName,isDeleted:false}).select({ name: 1, fullName: 1, logoLink: 1, _id: 1 });
 
@@ -57,9 +59,8 @@ const getCollege = async (req, res) => {
 
     let interns = await internModel.find({ collegeId:findCollege._id,isDeleted:false }).select({isDeleted:0,__v:0,collegeId:0});
 
-   
     let noInterns = "No interns applied to college"
-    
+
 
     let newData = {
       name: findCollege.name,
