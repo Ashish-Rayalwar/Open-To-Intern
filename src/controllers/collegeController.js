@@ -57,14 +57,29 @@ const getCollege = async (req, res) => {
 
     let interns = await internModel.find({ collegeId:findCollege._id,isDeleted:false }).select({isDeleted:0,__v:0,collegeId:0});
 
+   
+    let noInterns = "No interns applied to college"
+    
     let newData = {
       name: findCollege.name,
       fullName: findCollege.fullName,
       logoLink: findCollege.logoLink,
       interns: interns
     };
+    let newData2 = {
+      name: findCollege.name,
+      fullName: findCollege.fullName,
+      logoLink: findCollege.logoLink,
+      interns: noInterns
+    };
 
-    return res.status(200).send({ result: newData });
+    if(interns.length===0) {
+      return res.status(200).send({ result: newData2 });
+    }else{
+      return res.status(200).send({ result: newData });
+    }
+
+  
 
   } catch (err) {
 
