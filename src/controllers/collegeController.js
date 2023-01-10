@@ -60,6 +60,7 @@ const getCollege = async (req, res) => {
    
     let noInterns = "No interns applied to college"
     
+
     let newData = {
       name: findCollege.name,
       fullName: findCollege.fullName,
