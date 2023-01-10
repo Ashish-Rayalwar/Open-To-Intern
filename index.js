@@ -1,5 +1,5 @@
 const express = require("express")
-const bodyParser = require("body-parser")                   // bodyparser dotenv mongoose nodemon 
+const bodyParser = require("body-parser")                 
 const env = require("dotenv").config()
 const  route  = require("./src/routes/route")
 const { dbConnection } = require("./src/database/db")

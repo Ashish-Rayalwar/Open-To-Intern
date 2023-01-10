@@ -1,7 +1,7 @@
-const express = require("express");
 
-const { isValidObjectId } = require("mongoose");
 
+const httpCodes = require("http-status-codes")
+ 
 const internModel = require("../models/intern");
 const collegeModel = require("../models/college");
 
@@ -17,7 +17,7 @@ const createIntern = async (req, res) => {
 
     const { name, email, mobile, collegeName } = data;
 
-    if (Object.keys(data).length == 0) return res.status(400).send("Please send data in the Body");
+    if (Object.keys(data).length === 0) return res.status(400).send({msg:"Please send data in the Body"});
      
     if (!name || !validate.test(name)) return res.status(400).send({ status: false, msg: "Please provide valid Name" });
 

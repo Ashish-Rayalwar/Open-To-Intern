@@ -51,7 +51,7 @@ const getCollege = async (req, res) => {
 
     if(!(Object.keys(req.query).includes("collegeName"))) return res.status(400).send({msg:"Invalid key Name"})
       
-    if (!collegeName) return res.status(400).send({ msg: "plz send college name" });
+    if (!collegeName) return res.status(400).send({ msg: "plz provide college name" });
      
     let findCollege = await collegeModel.findOne({name:collegeName,isDeleted:false}).select({ name: 1, fullName: 1, logoLink: 1, _id: 1 });
 
@@ -59,7 +59,7 @@ const getCollege = async (req, res) => {
 
     let interns = await internModel.find({ collegeId:findCollege._id,isDeleted:false }).select({isDeleted:0,__v:0,collegeId:0});
 
-    let noInterns = "No interns applied to college"
+    let noInterns = `No interns applied to ${collegeName} college`
 
 
     let newData = {
