@@ -2,9 +2,9 @@
 const collegeModel = require("../models/college");
 const internModel = require("../models/intern");
 
-let validate = /^([a-z A-Z ]){2,100}$/;
+let validate = /^([a-z A-Z ,]){2,100}$/;
 
-let urlValidate = /^https?:\/\/.*\/.*\.(png|gif|webp|jpeg|jpg)\??.*$/gim;
+let urlValidate = /(http[s]*:\/\/)([a-z\-_0-9\/.]+)\.([a-z.]{2,3})\/([a-z0-9\-_\/._~:?#\[\]@!$&'()*+,;=%]*)([a-z0-9]+\.)(jpg|jpeg|png)/i
 
 const createCollege = async (req, res) => {
   try {
@@ -14,20 +14,25 @@ const createCollege = async (req, res) => {
      
     const { name, fullName, logoLink } = data;
 
-    if (!name || !validate.test(name)) return res.status(400).send({ status: false, msg: "Please provide valid Name" });
-
-    let checkName = await collegeModel.findOne({ name: name });
-
-    if (checkName) return res.status(400).send({ status: false, msg: "College Name already exist" });
+    if (!name ) return res.status(400).send({ status: false, msg: "Please provide Name" });
 
     if (!fullName || !validate.test(fullName)) return res.status(400).send({ status: false, msg: "Please provide valid full Name" });
-      
+    
+    if (!validate.test(name)) return res.status(400).send({ status: false, msg: "Please provide valid Name" });
+    
+    let checkName = await collegeModel.findOne({ name: name });
+    
+    if (checkName) return res.status(400).send({ status: false, msg: "College Name already exist" });
+    
+    
     let checkFullName = await collegeModel.findOne({ fullName: fullName });
-
+    
     if (checkFullName) return res.status(400).send({ status: false, msg: "College Name already in use" });
-      
-    if (!logoLink || !urlValidate.test(logoLink)) return res.status(400).send({ status: false, msg: "Please provide valid url link" });
-      
+
+    if (!logoLink) return res.status(400).send({ status: false, msg: "Please provide  url link" });
+
+    if (!urlValidate.test(logoLink)) return res.status(400).send({ status: false, msg: "Please provide valid url link" });
+
     let createData = await collegeModel.create(data);
 
     return res.status(201).send({ status: true, data: createData });
@@ -76,9 +81,9 @@ const getCollege = async (req, res) => {
     };
 
     if(interns.length===0) {
-      return res.status(200).send({ result: newData2 });
+      return res.status(200).send({ status:true,data: newData2 });
     }else{
-      return res.status(200).send({ result: newData });
+      return res.status(200).send({  status:true,data: newData });
     }
 
   
@@ -92,3 +97,8 @@ const getCollege = async (req, res) => {
 };
 
 module.exports = { createCollege, getCollege };
+
+
+
+
+
